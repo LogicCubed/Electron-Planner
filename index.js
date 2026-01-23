@@ -73,6 +73,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             </div>`;
             notesContainer.appendChild(noteElement);
+
+            const noteTextEl = noteElement.querySelector('.note-text');
+            if (noteTextEl.scrollHeight > noteTextEl.clientHeight) {
+                noteTextEl.classList.add('overflowing');
+            }
         });
 
         document.querySelectorAll(".edit-btn").forEach((btn) => {
