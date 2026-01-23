@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notes</title>
+    <title>Notes App</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -12,10 +12,17 @@
   </head>
 
   <body>
+    <div id="titlebar">
+      <div id="drag-region"></div>
+      <div id="window-controls">
+        <button id="min-btn">-</button>
+        <button id="max-btn">□</button>
+        <button id="close-btn">x</button>
+      </div>
+    </div>
     <div class="container">
       <header class="header">
         <h1>Notes</h1>
-        <p>Store your thoughts and ideas in style</p>
       </header>
 
       <div class="controls">
@@ -23,13 +30,14 @@
           <input
             type="text"
             id="searchInput"
-            placeholder="Search notes..."
+            placeholder="Search Notes..."
             class="search-input"
           />
           <div class="filter-group">
             <select id="filterSelect" class="filter-select">
               <option value="all">All Notes</option>
               <option value="important">Important</option>
+              <option value="personal">Personal</option>
               <option value="homework">Homework</option>
               <option value="coding">Coding</option>
               <option value="modelling">Modelling</option>
@@ -94,11 +102,23 @@
                   <input
                     type="radio"
                     name="noteTag"
+                    value="personal"
+                    class="tag-radio"
+                  />
+                  <span class="tag-label tag-personal">
+                    <i class="fa-solid fa-mug-saucer"></i> Personal
+                  </span>
+
+                </label>
+                <label class="tag-option">
+                  <input
+                    type="radio"
+                    name="noteTag"
                     value="homework"
                     class="tag-radio"
                   />
                   <span class="tag-label tag-homework">
-                    <i class="fas fa-user"></i> Homework
+                    <i class="fa-solid fa-book"></i> Homework
                   </span>
                 </label>
 
@@ -108,7 +128,6 @@
                     name="noteTag"
                     value="coding"
                     class="tag-radio"
-                    checked
                   />
                   <span class="tag-label tag-coding">
                     <i class="fa-solid fa-terminal"></i> Coding

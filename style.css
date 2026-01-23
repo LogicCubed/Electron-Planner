@@ -6,12 +6,55 @@
     padding: 0;
 }
 
+input,
+textarea,
+select,
+button {
+  font-family: "Montserrat", sans-serif;
+}
+
 body {
     font-family: "Montserrat", sans-serif;
-    background-color: #f8f9fa;
+    background-color: #1e1a23;
     color: #333;
     line-height: 1.6;
     padding: 20px;
+    padding-top: 30px;
+}
+
+#titlebar {
+    -webkit-app-region: drag;
+    height: 30px;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #17141a;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 9999;
+}
+
+#window-controls button {
+    -webkit-app-region: no-drag;
+    background: none;
+    border: none;
+    color: white;
+    width: 45px;
+    height: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+#window-controls button:hover {
+    background-color: #333;
+}
+
+#close-btn:hover {
+    background-color: #ff4c4c;
 }
 
 .container {
@@ -22,23 +65,25 @@ body {
 
 .header {
     text-align: center;
+    margin-top: 10px;
     margin-bottom: 40px;
 }
 
 .header h1 {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #4f46e5;
+    font-weight: extrabold;
+    color: #f0075c;
     margin-bottom: 10px;
 }
 
 .header p {
     font-size: 1.1rem;
-    color: #666;
+    color: #999;
 }
 
 .controls {
-    background-color: white;
+    background-color: #2a2430;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     padding: 20px;
@@ -60,7 +105,9 @@ body {
 .search-input {
     flex: 1;
     padding: 12px 15px;
-    border: 1px solid #ddd;
+    color: white;
+    background-color: #362e3e; 
+    border: 1px solid #2a2430;
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s, box-shadow 0.3s;
@@ -68,18 +115,24 @@ body {
 
 .search-input:focus {
     outline: none;
-    border-color: #4f46e5;
+    color: white;
+    border-color: #f0075c;
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
+.search-input::placeholder {
+    color: #b5b5b5;
+}
+
 .add-btn {
-    background-color: #4f46e5;
+    background-color: #f0075c;
     color: white;
     border: none;
     border-radius: 8px;
     padding: 12px 20px;
     font-size: 1rem;
     font-weight: 500;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -88,7 +141,7 @@ body {
 }
 
 .add-btn:hover {
-    background-color: #4338ca;
+    background-color: #b10544;
 }
 
 .notes-grid {
@@ -111,7 +164,7 @@ body {
 }
 
 .note-card {
-    background-color: white;
+    background-color: #2a2430;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     overflow: hidden;
@@ -136,7 +189,7 @@ body {
 .note-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #333;
+    color: #fff;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -158,10 +211,6 @@ body {
 
 .edit-btn:hover {
     color: #3b82f6;
-}
-
-.note-card.pinned .edit-btn i {
-    color: #2563eb;
 }
 
 .pin-btn {
@@ -191,6 +240,7 @@ body {
     background: none;
     border: none;
     font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
     transition: color 0.3s;
 }
@@ -200,7 +250,7 @@ body {
 }
 
 .note-text {
-    color: #666;
+    color: #fff;
     margin-bottom: 40px;
     white-space: pre-line;
 }
@@ -228,14 +278,19 @@ body {
     color: #4338ca;
 }
 
+.tag-personal {
+    background-color: #dbfffd;
+    color: #059d96;
+}
+
 .tag-homework {
     background-color: #ede9fe;
     color: #7c3aed;
 }
 
 .tag-coding {
-    background-color: #ecfdf5;
-    color: #047857;
+    background-color: #b6f4ff;
+    color: #19c1eb;
 }
 
 .tag-modelling {
@@ -250,7 +305,7 @@ body {
 
 .note-date {
     font-size: 0.75rem;
-    color: #999;
+    color: #b5b5b5;
 }
 
 .empty-state {
@@ -268,7 +323,7 @@ body {
 
 .empty-state h3 {
     font-size: 1.5rem;
-    color: #666;
+    color: #999;
     margin-bottom: 10px;
 }
 
@@ -298,7 +353,7 @@ body {
 }
 
 .modal {
-    background-color: white;
+    background-color: #2a2430;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -316,9 +371,10 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #3b3343;
 }
 .modal-title {
+    color: white;
     font-size: 1.25rem;
     font-weight: 600;
 }
@@ -326,14 +382,15 @@ body {
     background: none;
     border: none;
     font-size: 1.25rem;
-    color: #999;
+    color: white;
     cursor: pointer;
     transition: color 0.3s;
 }
 .modal-close:hover {
-    color: #666;
+    color: #ddd;
 }
 .modal-body {
+    color: white;
     padding: 20px;
 }
  
@@ -346,25 +403,33 @@ body {
     margin-bottom: 8px;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #555;
+    color: white;
 }
 
 .form-input {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid #3b3343;
+    background-color: #362e3e;
+    color: white;
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
+.form-input::placeholder {
+  color: #4d4158;
+}
+
 .form-input:focus {
     outline: none;
-    border-color: #4f46e5;
+    border-color: #f0075c;
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 .form-textarea {
+    background-color: #362e3e;
+    color: white;
     min-height: 120px;
     resize: vertical;
 }
@@ -375,18 +440,26 @@ body {
 }
 
 .filter-select {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
+    padding: 12px 40px 12px 15px;
+    border: 1px solid #3b3343;
     border-radius: 8px;
     font-size: 1rem;
-    background-color: white;
+    background-color: #362e3e;
+    color: white;
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 5 5-5z' fill='white'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 10px 5px;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .filter-select:focus {
     outline: none;
-    border-color: #4f46e5;
+    border-color: #f0075c;
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
@@ -402,6 +475,7 @@ body {
 
 
 .tags-container {
+    color: #362e3e;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -437,12 +511,16 @@ body {
     background-color: #4f46e5;
 }
 
+.tag-radio:checked+.tag-personal {
+    background-color: #047e78;
+}
+
 .tag-radio:checked+.tag-homework {
     background-color: #7c3aed;
 }
 
 .tag-radio:checked+.tag-coding {
-    background-color: #10b981;
+    background-color: #16a3c6;
 }
 
 .tag-radio:checked+.tag-modelling {
@@ -456,18 +534,19 @@ body {
 .submit-btn {
     width: 100%;
     padding: 14px;
-    background-color: #4f46e5;
+    background-color: #f0075c;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 1rem;
     font-weight: 500;
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .submit-btn:hover {
-    background-color: #4338ca;
+    background-color: #b10544;
 }
 
 .confirmation-modal .modal-body {
@@ -507,11 +586,32 @@ body {
 .cancel-btn {
     background-color: #e5e7eb;
     color: #333;
+    font-weight: bold;
     border: none;
 }
 
 .cancel-btn:hover {
     background-color: #d1d5db;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: #17141a;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #f0075c;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #b10544;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #17141a;
+    border-radius: 8px;
 }
 
 @keyframes fadeIn {

@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const notesContainer = document.getElementById("notesContainer");
     const addNoteBtn = document.getElementById("addNoteBtn");
@@ -26,6 +24,18 @@ document.addEventListener("DOMContentLoaded", function () {
     filterSelect.addEventListener("change", filterNotes);
     cancelDeleteBtn.addEventListener("click", closeConfirmModal);
     confirmDeleteBtn.addEventListener("click", confirmDeleteNote);
+
+    document.getElementById("min-btn").addEventListener("click", () => {
+        window.electronAPI.minimize();
+    });
+
+    document.getElementById("max-btn").addEventListener("click", () => {
+        window.electronAPI.maximize();
+    });
+
+    document.getElementById("close-btn").addEventListener("click", () => {
+        window.electronAPI.close();
+    });
 
     function renderNotes(notesToRender = notes) {
         notesToRender = [...notesToRender].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
@@ -103,6 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function getTagClass(tag) {
         const classes = {
             important: "tag-important",
+            personal: "tag-personal",
             homework: "tag-homework",
             coding: "tag-coding",
             modelling: "tag-modelling",
@@ -114,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function getTagIcon(tag) {
         const icons = {
             important: '<i class="fa-solid fa-circle-exclamation"></i>',
+            personal: '<i class="fa-solid fa-mug-saucer"></i>',
             homework: '<i class="fa-solid fa-book"></i>',
             coding: '<i class="fa-solid fa-terminal"></i>',
             modelling: '<i class="fa-solid fa-cube"></i>',
@@ -125,6 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function getTagName(tag) {
         const names = {
             important: "Important",
+            personal: "Personal",
             homework: "Homework",
             coding: "Coding",
             modelling: "Modelling",
@@ -145,6 +158,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function openAddNoteModal() {
+        const modalTitle = addNoteModal.querySelector(".modal-title");
+        if (addNoteModal.dataset.editingId) {
+            modalTitle.textContent = "Edit Note";
+        } else {
+            modalTitle.textContent = "New Note";
+        }
+
         addNoteModal.classList.add("active");
         document.body.style.overflow = "hidden";
     }
