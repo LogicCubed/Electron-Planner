@@ -10,6 +10,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmModal = document.getElementById("confirmModal");
     const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
     const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+    const viewNoteModal = document.getElementById("viewNoteModal");
+    const viewNoteTitle = document.getElementById("viewNoteTitle");
+    const viewNoteContent = document.getElementById("viewNoteContent");
+    const viewNoteTag = document.getElementById("viewNoteTag");
+    const viewNoteDate = document.getElementById("viewNoteDate");
+    const viewCloseBtn = document.getElementById("viewCloseBtn");
+    const viewEditBtn = document.getElementById("viewEditBtn");
+
+    let activeViewNoteId = null;
 
     let notes = JSON.parse(localStorage.getItem("notes")) || [];
     let noteToDeleteId = null;
@@ -24,6 +33,21 @@ document.addEventListener("DOMContentLoaded", function () {
     filterSelect.addEventListener("change", filterNotes);
     cancelDeleteBtn.addEventListener("click", closeConfirmModal);
     confirmDeleteBtn.addEventListener("click", confirmDeleteNote);
+    viewCloseBtn.addEventListener("click", closeViewModal);
+
+    viewEditBtn.addEventListener("click", () => {
+        const note = notes.find(n => n.id === activeViewNoteId);
+        if (!note) return;
+
+        closeViewModal();
+
+        document.getElementById("noteTitle").value = note.title;
+        document.getElementById("noteContent").value = note.content;
+        document.querySelector(`input[name="noteTag"][value="${note.tag}"]`).checked = true;
+
+        addNoteModal.dataset.editingId = note.id;
+        openAddNoteModal();
+    });
 
     document.getElementById("min-btn").addEventListener("click", () => {
         window.electronAPI.minimize();
@@ -42,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         notesContainer.innerHTML = "";
 
-        notesToRender.forEach((note, index) => {
+        notesToRender.forEach((note) => {
             const noteElement = document.createElement("div");
             noteElement.className = "note-card fade-in";
 
@@ -72,18 +96,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     <span class="note-date">${formatDate(note.date)}</span>
                 </div>
             </div>`;
+
+            noteElement.addEventListener("click", (e) => {
+                if (e.target.closest("button")) return;
+                openViewModal(note);
+            });
+
             notesContainer.appendChild(noteElement);
 
-            const noteTextEl = noteElement.querySelector('.note-text');
+            const noteTextEl = noteElement.querySelector(".note-text");
             if (noteTextEl.scrollHeight > noteTextEl.clientHeight) {
-                noteTextEl.classList.add('overflowing');
+                noteTextEl.classList.add("overflowing");
             }
         });
 
         document.querySelectorAll(".edit-btn").forEach((btn) => {
             btn.addEventListener("click", function () {
                 const id = parseInt(this.getAttribute("data-id"));
-                const note = notes.find((n) => n.id === id);
+                const note = notes.find(n => n.id === id);
                 if (!note) return;
 
                 document.getElementById("noteTitle").value = note.title;
@@ -91,7 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector(`input[name="noteTag"][value="${note.tag}"]`).checked = true;
 
                 addNoteModal.dataset.editingId = id;
-
                 openAddNoteModal();
             });
         });
@@ -116,39 +145,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getTagClass(tag) {
-        const classes = {
+        return {
             important: "tag-important",
             personal: "tag-personal",
             homework: "tag-homework",
             coding: "tag-coding",
             modelling: "tag-modelling",
             misc: "tag-misc",
-        };
-        return classes[tag] || "";
+        }[tag] || "";
     }
 
     function getTagIcon(tag) {
-        const icons = {
+        return {
             important: '<i class="fa-solid fa-circle-exclamation"></i>',
             personal: '<i class="fa-solid fa-mug-saucer"></i>',
             homework: '<i class="fa-solid fa-book"></i>',
             coding: '<i class="fa-solid fa-terminal"></i>',
             modelling: '<i class="fa-solid fa-cube"></i>',
             misc: '<i class="fa-solid fa-dice"></i>',
-        };
-        return icons[tag] || "";
+        }[tag] || "";
     }
 
     function getTagName(tag) {
-        const names = {
+        return {
             important: "Important",
             personal: "Personal",
             homework: "Homework",
             coding: "Coding",
             modelling: "Modelling",
             misc: "Misc",
-        };
-        return names[tag] || tag;
+        }[tag] || tag;
     }
 
     function formatDate(dateString) {
@@ -164,12 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function openAddNoteModal() {
         const modalTitle = addNoteModal.querySelector(".modal-title");
-        if (addNoteModal.dataset.editingId) {
-            modalTitle.textContent = "Edit Note";
-        } else {
-            modalTitle.textContent = "New Note";
-        }
-
+        modalTitle.textContent = addNoteModal.dataset.editingId ? "Edit Note" : "New Note";
         addNoteModal.classList.add("active");
         document.body.style.overflow = "hidden";
     }
@@ -197,7 +218,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const title = document.getElementById("noteTitle").value;
         const content = document.getElementById("noteContent").value;
         const tag = document.querySelector('input[name="noteTag"]:checked').value;
-
         const editingId = addNoteModal.dataset.editingId;
 
         if (editingId) {
@@ -210,15 +230,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             delete addNoteModal.dataset.editingId;
         } else {
-            const newNote = {
+            notes.unshift({
                 id: Date.now(),
                 title,
                 content,
                 tag,
                 pinned: false,
                 date: new Date().toISOString(),
-            };
-            notes.unshift(newNote);
+            });
         }
 
         saveNotes();
@@ -250,17 +269,14 @@ document.addEventListener("DOMContentLoaded", function () {
         let filteredNotes = notes;
 
         if (searchTerm) {
-            filteredNotes = filteredNotes.filter(
-                (note) =>
-                    note.title.toLowerCase().includes(searchTerm) ||
-                    note.content.toLowerCase().includes(searchTerm)
+            filteredNotes = filteredNotes.filter(note =>
+                note.title.toLowerCase().includes(searchTerm) ||
+                note.content.toLowerCase().includes(searchTerm)
             );
         }
 
         if (filterValue !== "all") {
-            filteredNotes = filteredNotes.filter(
-                (note) => note.tag === filterValue
-            );
+            filteredNotes = filteredNotes.filter(note => note.tag === filterValue);
         }
 
         renderNotes(filteredNotes);
@@ -268,10 +284,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateEmptyState(notesToCheck = notes) {
-        if (notesToCheck.length === 0) {
-            emptyState.style.display = "block";
-        } else {
-            emptyState.style.display = "none";
-        }
+        emptyState.style.display = notesToCheck.length === 0 ? "block" : "none";
     }
+
+    function openViewModal(note) {
+        activeViewNoteId = note.id;
+        viewNoteTitle.textContent = note.title;
+        viewNoteContent.textContent = note.content;
+        viewNoteTag.className = `note-tag ${getTagClass(note.tag)}`;
+        viewNoteTag.innerHTML = `${getTagIcon(note.tag)} ${getTagName(note.tag)}`;
+        viewNoteDate.textContent = formatDate(note.date);
+
+        requestAnimationFrame(() => {
+            if (viewNoteContent.scrollHeight > viewNoteContent.clientHeight) {
+                viewNoteContent.classList.add("has-gradient");
+            } else {
+                viewNoteContent.classList.remove("has-gradient");
+            }
+        });
+
+        viewNoteModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeViewModal() {
+        viewNoteContent.classList.remove("has-gradient");
+        viewNoteModal.classList.remove("active");
+        document.body.style.overflow = "auto";
+        activeViewNoteId = null;
+    }
+
+    viewNoteModal.addEventListener("click", (e) => {
+        if (e.target === viewNoteModal) closeViewModal();
+    });
 });

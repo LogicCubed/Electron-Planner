@@ -614,6 +614,23 @@ body {
     background: linear-gradient(to top, #2a2430, rgba(42, 36, 48, 0));
 }
 
+.modal-view {
+    max-width: 700px;
+}
+
+.view-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.view-content {
+    white-space: pre-line;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    color: #fff;
+    font-size: 1rem;
+}
+
 ::-webkit-scrollbar {
     width: 12px;
     background-color: #17141a;
